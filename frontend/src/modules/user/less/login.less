@@ -1,4 +1,5 @@
-@import 'colours';
+@import 'colours';  
+@import 'mixins';
 
 .module-user {
   &.location-login,
@@ -8,14 +9,14 @@
 
     max-width: 450px;
     margin: 0 auto;
-    color: #fff;
+    color: @adapt-primary-color;
 
     #app {
       margin-left: 0px;
     }
 
     a {
-      color: #fff;
+      color:@adapt-primary-color;
     }
 
     button.small {
@@ -29,12 +30,12 @@
   }
 
   .login-logo {
-    height: 123px;
+    height: 260px;
     background-image: url('assets/adapt-learning-logo-white.png');
     background-position: center;
     background-repeat: no-repeat;
   }
-
+  
   .login-title {
     text-align: center;
     font-size: 32px;
@@ -75,22 +76,22 @@
       border: 0;
       padding: 11px 20px;
       background-color: fade(#fff, 40%);
-      color: white;
+      color:@adapt-primary-color;
       margin-bottom: 5px;
       height: 40px;
     }
 
     input::-webkit-input-placeholder {
-      color: white;
+      color:@adapt-primary-color;
     }
     input:-moz-placeholder {
-      color: white;
+      color:@adapt-primary-color;
     }
     input::-moz-placeholder {
-      color: white;
+      color:@adapt-primary-color;
     }
     input:-ms-input-placeholder {
-      color: white;
+      color:@adapt-primary-color;
     }
 
     .input-username-email,
@@ -127,7 +128,7 @@
     margin-right: 80px;
     a {
       font-size: 15px;
-      color: white;
+      color:@adapt-primary-color;
       text-decoration: none;
     }
   }
