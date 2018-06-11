@@ -1,8 +1,9 @@
-@import 'colours';
+@import 'colours'; 
+@import 'mixins' ;
 
 .tb-title {
     background-color: #9cabc4;
-    color:#fff;
+    color:@primary-color;
     text-align: center;
     border-bottom: 1px gray solid;
     padding: 24px 30px!important;
@@ -14,6 +15,7 @@
   border-bottom: 1px solid #efefef;
 
   .tb-col-inner {
+    color: @secondary-color;
     padding-right:10px;
     :not(.tb-heading)& {
       font-weight: @font-weight;
