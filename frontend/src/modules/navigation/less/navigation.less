@@ -1,4 +1,5 @@
-@import 'colours';
+@import 'colours';  
+@import 'mixins';
 @import 'fonts';
 @import 'sharedStyles';
 
@@ -9,13 +10,16 @@
   width:100%;
   height:60px;
   z-index:500;
-  background-color: #2aa3ce;
+  background-color: white;
   background-position: right;
   border-bottom:1px solid rgba(0,0,0,0.15);
   font-size: 15px;
   font-family: @font-title;
 }
 
+.navigation-global-menu {
+    color: @primary-color;
+}
 .navigation-bg {
   width: 100%;
   height: 100%;
@@ -49,6 +53,9 @@
 	width:50%;
 	float:left;
   .navigation-product-name {
+    background:url("assets/logo-tokopedia-asset.png");
+    width: 100%;
+    height: 100%;
     .unselectable;
   }
 }
