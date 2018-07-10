@@ -1,3 +1,6 @@
+@import 'colours';
+@import 'mixins';
+
 // apply border to only the top level fieldset
 .form-container > form > div > fieldset {
   border: 1px solid #d6f2f9;
@@ -14,6 +17,7 @@ fieldset {
   }
   label {
     cursor: auto;
+    color: #3e4960;
   }
 }
 
@@ -25,6 +29,7 @@ form .error {
 }
 
 .legend {
+  color: @primary-color;
   display: block;
   legend {
     padding: 25px 0 10px 30px;
