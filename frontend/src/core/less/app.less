@@ -2,17 +2,18 @@
 @import 'mixins' ;
 
 html {
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 
 body {
   background-color:@ui-content-color;
-  color:@sidebar-color;
+  color:@disabled-color;
 }
 
 #app {
 	margin-top:60px;
-	margin-left:250px;
+  margin-left:250px;
+  overflow-y: auto;
 }
 
 .app-inner {
@@ -49,13 +50,13 @@ span.error {
   }
 
   .loading-inner {
-    margin-top: 25%;
+    margin-top: 15%;
   }
 
   .loading-logo {
     margin-bottom: @loading-icon-size;
     img {
-      height: 50px;
+      height: 135px;
     }
   }
 
@@ -63,7 +64,7 @@ span.error {
     margin: 0 auto 15px auto;
     text-align: center;
 
-    > div {
+    div {
       width: @loading-icon-size;
       height: @loading-icon-size;
       background-color: @primary-color;

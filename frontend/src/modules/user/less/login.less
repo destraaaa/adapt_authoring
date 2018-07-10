@@ -30,17 +30,20 @@
   }
 
   .login-logo {
-    height: 170px;
+    height: 260px;
     background-image: url('assets/adapt-learning-logo-white.png');
-    background-position: center;
-    background-repeat: no-repeat;
+  }
+  
+  form.login-form {
+    position: relative;
+    bottom: 55px;
   }
   
   .login-title {
     text-align: center;
     font-size: 32px;
-    margin-top: 60px;
-    margin-bottom: 40px;
+    margin-top: 20px;
+    margin-bottom: 15px;
   }
 
   #loginError {
@@ -117,10 +120,17 @@
   .remember-me-label {
     padding-left: 10px;
     display: inline;
+    color:@adapt-primary-color;
+    text-shadow: -1px 0 @adapt-line-color, 0 1px @adapt-line-color, 1px 0 @adapt-line-color, 0 -1px @adapt-line-color;
   }
 
   .remember-me-checkbox {
     vertical-align: middle;
+  }
+
+  .login-inner {
+    position: relative;
+    bottom: 55px;
   }
 
   .login-forgot-password {
@@ -130,6 +140,7 @@
       font-size: 15px;
       color:@adapt-primary-color;
       text-decoration: none;
+      text-shadow: -1px 0 @adapt-line-color, 0 1px @adapt-line-color, 1px 0 @adapt-line-color, 0 -1px @adapt-line-color;
     }
   }
 }
