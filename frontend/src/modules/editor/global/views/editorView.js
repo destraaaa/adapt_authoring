@@ -150,8 +150,6 @@ define(function (require) {
 
         var $downloadForm = $('#downloadForm');
         $downloadForm.attr('action', '/download/' + Origin.sessionModel.get('tenantId') + '/' + Origin.editor.data.course.get('_id') + '/' + jqXHR.payload.zipName + '/download.zip');
-        UnzipName = $downloadForm[0].action;
-        console.log($downloadForm[0].action);
 
       }, this)).fail(_.bind(function (jqXHR, textStatus, errorThrown) {
         this.resetDownloadProgress();
