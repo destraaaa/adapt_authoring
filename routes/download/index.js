@@ -101,11 +101,11 @@ server.get('/download/:tenant/:course/:title/download.zip', function (req, res, 
 server.get('/download/:tenant/:course/:title/download', function (req, res, next) {
   var tenantId = req.params.tenant;
   var courseId = req.params.course;
-  var courseName = req.param.title;
+  var courseName = '/'+ req.params.title;
   var FRAMEWORK_ROOT_FOLDER = path.join(configuration.tempDir, configuration.getConfig('masterTenantID'), Constants.Folders.Framework);
   var downloadZipFilename = path.join(FRAMEWORK_ROOT_FOLDER, Constants.Folders.AllCourses, tenantId, courseId, Constants.Filenames.Download);
   var downloadBuildFilename = path.join(FRAMEWORK_ROOT_FOLDER, Constants.Folders.AllCourses, tenantId, courseId, Constants.Filenames.Build);
-  var downloadNewFilename = path.join(FRAMEWORK_ROOT_FOLDER, Constants.Folders.AllCourses, tenantId, courseId,'/',courseName);
+  var downloadNewFilename = path.join(FRAMEWORK_ROOT_FOLDER, Constants.Folders.AllCourses, tenantId, courseId,courseName);
   var currentUser = usermanager.getCurrentUser();
   
 
