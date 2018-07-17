@@ -164,7 +164,6 @@ AdaptOutput.prototype.publish = function(courseId, mode, request, response, next
             var args = [];
             var outputFolder = COURSE_FOLDER.replace(FRAMEWORK_ROOT_FOLDER + path.sep,'');
 
-            console.log('info outputFolder:', outputFolder);
             // Append the 'build' folder to later versions of the framework
             if (semver.gte(semver.clean(frameworkVersion), semver.clean('2.0.0'))) {
               outputFolder = path.join(outputFolder, Constants.Folders.Build);
