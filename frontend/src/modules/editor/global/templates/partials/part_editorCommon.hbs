@@ -6,26 +6,31 @@
     </span>
   </button>
 
-  <button class="editor-common-sidebar-download action-secondary">
+  <button class="editor-common-sidebar-publish action-secondary">
+    <span class="editor-common-sidebar-publish-inner">{{ t 'app.publish'}}</span>
+    <span class="editor-common-sidebar-publishing display-none">
+      <i class="fa fa-circle-o-notch fa-spin"></i>{{ t 'app.publishing'}}
+    </span>
+  </button>
+
+  {{!-- <button class="editor-common-sidebar-download action-secondary">
     <span class="editor-common-sidebar-download-inner">{{ t 'app.download'}}</span>
     <span class="editor-common-sidebar-downloading display-none">
       <i class="fa fa-circle-o-notch fa-spin"></i>{{ t 'app.downloading'}}
     </span>
-  </button>
+  </button> --}}
 
-  <div class="separator" />
-
-  {{#ifHasPermissions "*/*:create,*/*:read,*/*:update,*/*:delete"}}
-    <div class="sidebar-row">
-      <button class="editor-common-sidebar-export">
-        <span class="editor-common-sidebar-export-inner">
-          <i class="fa fa-code primary-color"/>{{ t 'app.export'}}
-        </span>
-        <span class="editor-common-sidebar-exporting display-none">
-          <i class="fa fa-circle-o-notch fa-spin primary-color"></i>{{ t 'app.exporting'}}
-        </span>
-      </button>
-    </div>
+  <div class="separator" /> {{#ifHasPermissions "*/*:create,*/*:read,*/*:update,*/*:delete"}}
+  <div class="sidebar-row">
+    <button class="editor-common-sidebar-export">
+      <span class="editor-common-sidebar-export-inner">
+        <i class="fa fa-code primary-color" />{{ t 'app.export'}}
+      </span>
+      <span class="editor-common-sidebar-exporting display-none">
+        <i class="fa fa-circle-o-notch fa-spin primary-color"></i>{{ t 'app.exporting'}}
+      </span>
+    </button>
+  </div>
   {{/ifHasPermissions}}
 
   <div class="separator" />
@@ -33,7 +38,7 @@
   <div class="sidebar-row">
     <button class="editor-common-sidebar-project">
       <span class="editor-common-sidebar-project-inner">
-        <i class="fa fa-chevron-right primary-color"/>{{ t 'app.projectsettings'}}
+        <i class="fa fa-chevron-right primary-color" />{{ t 'app.projectsettings'}}
       </span>
     </button>
   </div>
@@ -41,7 +46,7 @@
   <div class="sidebar-row">
     <button class="editor-common-sidebar-config">
       <span class="editor-common-sidebar-config-inner">
-        <i class="fa fa-chevron-right primary-color"/>{{ t 'app.configurationsettings'}}
+        <i class="fa fa-chevron-right primary-color" />{{ t 'app.configurationsettings'}}
       </span>
     </button>
   </div>
@@ -49,7 +54,7 @@
   <div class="sidebar-row">
     <button class="editor-common-sidebar-select-theme">
       <span class="editor-common-sidebar-select-theme-inner">
-        <i class="fa fa-chevron-right primary-color"/></i>{{ t 'app.themepicker'}}
+        <i class="fa fa-chevron-right primary-color" /></i>{{ t 'app.themepicker'}}
       </span>
     </button>
   </div>
@@ -57,7 +62,7 @@
   <div class="sidebar-row">
     <button class="editor-common-sidebar-menusettings">
       <span class="editor-common-sidebar-menusettings-inner">
-        <i class="fa fa-chevron-right primary-color"/></i>{{ t 'app.menupicker'}}
+        <i class="fa fa-chevron-right primary-color" /></i>{{ t 'app.menupicker'}}
       </span>
     </button>
   </div>
@@ -65,7 +70,7 @@
   <div class="sidebar-row">
     <button class="editor-common-sidebar-extensions">
       <span class="editor-common-sidebar-extensions-inner">
-        <i class="fa fa-chevron-right primary-color"/></i>{{ t 'app.manageextensions'}}
+        <i class="fa fa-chevron-right primary-color" /></i>{{ t 'app.manageextensions'}}
       </span>
     </button>
   </div>

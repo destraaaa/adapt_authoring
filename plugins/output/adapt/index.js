@@ -164,6 +164,7 @@ AdaptOutput.prototype.publish = function(courseId, mode, request, response, next
             var args = [];
             var outputFolder = COURSE_FOLDER.replace(FRAMEWORK_ROOT_FOLDER + path.sep,'');
 
+            console.log('info outputFolder:', outputFolder);
             // Append the 'build' folder to later versions of the framework
             if (semver.gte(semver.clean(frameworkVersion), semver.clean('2.0.0'))) {
               outputFolder = path.join(outputFolder, Constants.Folders.Build);
@@ -225,9 +226,8 @@ AdaptOutput.prototype.publish = function(courseId, mode, request, response, next
           // Now zip the build package
           var filename = path.join(COURSE_FOLDER, Constants.Filenames.Download);
           var zipName = self.slugify(outputJson['course'].title);
-          var output = fs.createWriteStream(filename),
-            archive = archiver('zip');
-
+          var output = fs.createWriteStream(filename);
+            archive = archiver('zip');       
           output.on('close', function() {
             resultObject.filename = filename;
             resultObject.zipName = zipName;
@@ -237,10 +237,12 @@ AdaptOutput.prototype.publish = function(courseId, mode, request, response, next
 
             callback();
           });
+
           archive.on('error', function(err) {
             logger.log('error', err);
             callback(err);
           });
+
 
           archive.pipe(output);
 
@@ -264,6 +266,8 @@ AdaptOutput.prototype.publish = function(courseId, mode, request, response, next
 
 };
 
+
+// export file----------------------------------------------------------------------------------------
 AdaptOutput.prototype.export = function (courseId, request, response, next) {
   var self = this;
   var tenantId = usermanager.getCurrentUser().tenant._id;
