@@ -112,7 +112,7 @@ server.get('/download/:tenant/:course/:title/download', function (req, res, next
   var downloadBuildFilename = path.join(FRAMEWORK_ROOT_FOLDER, Constants.Folders.AllCourses, tenantId, courseId, Constants.Filenames.Build);
   var downloadNewFilename = path.join(FRAMEWORK_ROOT_FOLDER, Constants.Folders.AllCourses, tenantId, courseId, courseName);
   var currentUser = usermanager.getCurrentUser();
-
+  const targetFolderName = "/opt/lampp/htdocs"+courseName;
 
   if (currentUser && (currentUser.tenant._id == tenantId)) {
     fs.stat(downloadZipFilename, function (err, stat) {
@@ -181,7 +181,7 @@ server.get('/download/:tenant/:course/:title/download', function (req, res, next
           }));
         });
 
-        fse.copySync(downloadBuildFilename, "/opt/lampp/htdocs"+courseName);
+        fse.copySync(downloadBuildFilename, targetFolderName);
         res.redirect('back');
       }
     });
