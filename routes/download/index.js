@@ -112,10 +112,10 @@ server.get('/download/:tenant/:course/:title/download', function (req, res, next
   var downloadBuildFilename = path.join(FRAMEWORK_ROOT_FOLDER, Constants.Folders.AllCourses, tenantId, courseId, Constants.Filenames.Build);
   var downloadNewFilename = path.join(FRAMEWORK_ROOT_FOLDER, Constants.Folders.AllCourses, tenantId, courseId, courseName);
   var currentUser = usermanager.getCurrentUser();
-  const targetFolderName = "/opt/lampp/htdocs"+courseName;
+  const targetFolderName = "/opt/lampp/htdocs" + courseName;
 
   if (currentUser && (currentUser.tenant._id == tenantId)) {
-    fs.stat(downloadZipFilename, function (err, stat) {
+    fs.stat(downloadZipFilename, async function (err, stat) {
       if (err) {
         logger.log('error', 'Error calling fs.stat');
         logger.log('error', err);
@@ -123,6 +123,68 @@ server.get('/download/:tenant/:course/:title/download', function (req, res, next
         next(err);
       } else {
         // post data to database
+        var pages = [],
+          page = [],
+          component = [],
+          components = [],
+          pageId,
+          articleId,
+          blockId,
+          componentId,
+          heroImagePath;
+
+
+        async function pageJson(a) {
+          return new Promise((resolve, reject) => {
+            fs.readFile(downloadBuildFilename + "/course/en/" + a + ".json", function read(err, data) {
+              if (err) {
+                return reject(err);
+              }
+              var b = JSON.parse(data);
+              // console.log(pageId)
+              return resolve(b);
+            })
+          })
+        }
+
+
+        pageId = await pageJson("contentObjects")
+        articleId = await pageJson("articles")
+        blockId = await pageJson("blocks")
+        component = await pageJson("components")
+
+        pageId.forEach(pageItem => {
+          components = []
+          articleId.forEach(articleItem => {
+            blockId.forEach(blockItem => {
+              component.forEach(componentItem => { 
+                if (componentItem._parentId === blockItem._id) {
+                  if (blockItem._parentId === articleItem._id) {
+                    if (articleItem._parentId === pageItem._id) {
+                            components.push({
+                              "cid" : componentItem._id,
+                              "_type" : componentItem._component
+                            })
+                    }
+                  }
+                }
+
+              });
+            });
+          });
+          pages.push({
+           "page": {
+              "pid" : pageItem._id,
+              "title": pageItem.title
+            },
+            "components" : components
+          })
+
+          heroImagePath = req.params.title+"/"+pageItem._graphic.src
+        });
+        
+
+
         MongoClient.connect(url, function (err, db) {
           if (err) throw err;
           var dbo = db.db("adapt-tenant-master");
@@ -130,19 +192,9 @@ server.get('/download/:tenant/:course/:title/download', function (req, res, next
             _id: new objectId(req.params.course)
           }, (function (err, result) {
             if (err) throw err;
-            var tagLength = result.tags.length;
-            tagInit = 0;
-            tagging = [];
-            heroImageId = "";
-           
-            dbo.collection("assets").findOne({
-                _id: new objectId(result.heroImage)
-              }, (function (err, result) {
-                if (err) throw err;
-                if (result == null)
-                  heroImageId = "";
-                else heroImageId = courseName+result.path;
-              })),
+            var tagLength = result.tags.length,
+              tagInit = 0,
+              tagging = []
               result.tags.forEach(function (item) {
                 dbo.collection("tags").findOne({
                   _id: new objectId(item)
@@ -163,7 +215,8 @@ server.get('/download/:tenant/:course/:title/download', function (req, res, next
                         title: req.params.title,
                         categories: tagging.toString(),
                         createdBy: createdBy,
-                        image: heroImageId
+                        image: heroImagePath,
+                        pages: pages
                       },
                       headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'

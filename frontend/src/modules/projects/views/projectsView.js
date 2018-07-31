@@ -56,12 +56,12 @@ define(function(require){
       Origin.trigger('sidebar:update:ui', prefs);
     },
 
-    // Set some default preferences
+    // Set some default options preferences
     getUserPreferences: function() {
       var prefs = OriginView.prototype.getUserPreferences.apply(this, arguments);
 
       if(!prefs.layout) prefs.layout = 'grid';
-      if(!prefs.sort) prefs.sort = 'asc';
+      if(!prefs.sort) prefs.sort = 'updated';
 
       return prefs;
     },
