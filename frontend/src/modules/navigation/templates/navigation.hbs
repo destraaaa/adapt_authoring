@@ -13,8 +13,8 @@
         <span></span>
       </div>
     </a>
-    <div href="#" class="navigation-item navigation-product-name"><img src="css/assets/logo-tokopedia-asset.png" alt="Logo" width="165"/></div>
-    <div href="#" class="navigation-item navigation-product-name" id="product-name"> <strong> {{t 'app.productname'}} </strong>  </div>
+    <div href="#" class="navigation-item navigation-product-name"><img src="css/assets/logo-tokopedia-asset.png" alt="Logo" width="250" height="40"></div>
+    <div href="#" class="navigation-item navigation-product-name" id="product-name"></div>     
     {{/if}}
   </div>
 {{#if _canRevert}}
@@ -28,7 +28,7 @@
       <span>{{t 'app.help'}}</span>
     </a> --}}
     <a href="#" class="navigation-item navigation-profile" data-event="user:profile">
-      {{t 'app.loggedinas'}}: <span>{{email}}</span>
+  <span>{{email}}</span>
     </a>
     <a href="#" class="navigation-item navigation-user-logout btn white-hollow" data-event="user:logout">
       <span>{{t 'app.logout'}}</span>
