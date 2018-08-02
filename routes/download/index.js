@@ -124,66 +124,79 @@ server.get('/download/:tenant/:course/:title/download', function (req, res, next
       } else {
         // post data to database
         var pages = [],
-          page = [],
-          component = [],
           components = [],
-          pageId,
-          articleId,
-          blockId,
-          componentId,
           heroImagePath;
 
 
-        async function pageJson(a) {
+        async function parseCourseInfo(filename) {
           return new Promise((resolve, reject) => {
-            fs.readFile(downloadBuildFilename + "/course/en/" + a + ".json", function read(err, data) {
+            fs.readFile(downloadBuildFilename + "/course/en/" + filename, function read(err, data) {
               if (err) {
                 return reject(err);
               }
-              var b = JSON.parse(data);
-              // console.log(pageId)
-              return resolve(b);
+              return resolve(JSON.parse(data));
             })
           })
         }
 
+        let contentObjects = await parseCourseInfo("contentObjects.json")
+        let articles = await parseCourseInfo("articles.json")
+        let blocks = await parseCourseInfo("blocks.json")
+        let components_ = await parseCourseInfo("components.json")
 
-        pageId = await pageJson("contentObjects")
-        articleId = await pageJson("articles")
-        blockId = await pageJson("blocks")
-        component = await pageJson("components")
-
-        pageId.forEach(pageItem => {
-          components = []
-          articleId.forEach(articleItem => {
-            blockId.forEach(blockItem => {
-              component.forEach(componentItem => { 
-                if (componentItem._parentId === blockItem._id) {
-                  if (blockItem._parentId === articleItem._id) {
-                    if (articleItem._parentId === pageItem._id) {
-                            components.push({
-                              "cid" : componentItem._id,
-                              "_type" : componentItem._component
-                            })
-                    }
-                  }
-                }
-
-              });
-            });
-          });
-          pages.push({
-           "page": {
-              "pid" : pageItem._id,
-              "title": pageItem.title
-            },
-            "components" : components
+        async function constructCourseMap() {
+          return new Promise((resolve) => {
+            let courseStructure = new Map()
+            components_.forEach(comp => {
+              courseStructure.set(comp._id, comp._parentId)
+            })
+            blocks.forEach(block => {
+              courseStructure.set(block._id, block._parentId)
+            })
+            articles.forEach(article => {
+              courseStructure.set(article._id, article._parentId)
+            })
+            return resolve(courseStructure)
           })
-
-          heroImagePath = req.params.title+"/"+pageItem._graphic.src
-        });
+        }
+   
+        let struc = await constructCourseMap() 
         
+        async function getComponentPage(componentId) {
+          return new Promise((resolve) => {
+            let parent_id = struc.get(componentId)
+            do {
+              parent_id = struc.get(parent_id)
+            }
+            while (struc.get(parent_id) != undefined)
+            return resolve(parent_id)
+          })
+        }
 
+        let has_checked = new Array(components_.length).fill(false)
+        for (let i = 0; i < contentObjects.length; i++) {
+          components = []
+          heroImagePath = req.params.title + "/" + contentObjects[0]._graphic.src
+          for (let j = 0; j < components_.length; j++) {
+            if (!has_checked[j]) {
+              if (contentObjects[i]._id == await getComponentPage(components_[j]._id)) {
+                components.push({
+                  "cid": components_[j]._id,
+                  "_type": components_[j]._component
+                })
+                has_checked[j] = true
+              }
+            }
+          }
+          pages.push({
+            "page": {
+              "pid": contentObjects[i]._id,
+              "title": contentObjects[i].title
+            },
+            "components": components
+          })
+        }
+        
 
         MongoClient.connect(url, function (err, db) {
           if (err) throw err;
@@ -195,41 +208,41 @@ server.get('/download/:tenant/:course/:title/download', function (req, res, next
             var tagLength = result.tags.length,
               tagInit = 0,
               tagging = []
-              result.tags.forEach(function (item) {
-                dbo.collection("tags").findOne({
-                  _id: new objectId(item)
-                }, (function (err, result) {
-                  if (err) throw err;
-                  tagging.push(result.title);
-                  tagInit++;
-                  if (tagInit == tagLength) { 
-                    var authOptions = {
-                      method: 'POST',
-                      url: '/api/course/add',
-                      proxy: {
-                        host: '192.168.245.89',
-                        port: 8080
+            result.tags.forEach(function (item) {
+              dbo.collection("tags").findOne({
+                _id: new objectId(item)
+              }, (function (err, result) {
+                if (err) throw err;
+                tagging.push(result.title);
+                tagInit++;
+                if (tagInit == tagLength) {
+                  var authOptions = {
+                    method: 'POST',
+                    url: '/api/course/add',
+                    proxy: {
+                      host: '192.168.245.89',
+                      port: 8080
                     },
-                      data: {
-                        id: req.params.course,
-                        title: req.params.title,
-                        categories: tagging.toString(),
-                        createdBy: createdBy,
-                        image: heroImagePath,
-                        pages: pages
-                      },
-                      headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                      },
-                      json: true
-                    };
-                    axios(authOptions)
-                      .catch(function (error) {
-                        console.log(error);
-                      });
-                  }
-                }));
-              });
+                    data: {
+                      id: req.params.course,
+                      title: req.params.title,
+                      categories: tagging.toString(),
+                      createdBy: createdBy,
+                      image: heroImagePath,
+                      pages: pages
+                    },
+                    headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    json: true
+                  };
+                  axios(authOptions)
+                    .catch(function (error) {
+                      console.log(error);
+                    });
+                }
+              }));
+            });
             db.close();
           }));
         });
